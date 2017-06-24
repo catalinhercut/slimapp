@@ -4,6 +4,17 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app = new \Slim\App;
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+$app->add(function ($req, $res, $next) {
+    $response = $next($req, $res);
+    return $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+});
+
 $app->get('/hello/{name}', function (Request $request, Response $response) {
     $name = $request->getAttribute('name');
     $response->getBody()->write("Hello, $name");
@@ -13,7 +24,6 @@ $app->get('/hello/{name}', function (Request $request, Response $response) {
 
 //Get all Customers
 $app->get('/api/customers', function(Request $request, Response $response){
-	echo 'here are the Customers<br><hr>';
 	$sql = "SELECT * from customers";
 
 	try{
@@ -34,7 +44,6 @@ $app->get('/api/customers', function(Request $request, Response $response){
 
 //Get Single Customer
 $app->get('/api/customer/{id}', function(Request $request, Response $response){
-	echo 'here is the Customer<br><hr>';
 	$id = $request->getAttribute('id');
 	$sql = "SELECT * from customers WHERE id = $id";
 
@@ -44,7 +53,7 @@ $app->get('/api/customer/{id}', function(Request $request, Response $response){
 		//Connect
 		$db = $db->connect();
 		$stmt = $db->query($sql);
-		$customer = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$customer = $stmt->fetch(PDO::FETCH_OBJ);
 		$db = null;
 		echo json_encode($customer);
 
