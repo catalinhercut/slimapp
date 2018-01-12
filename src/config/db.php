@@ -1,10 +1,10 @@
 <?php 
 class db {
 	//Properties
-	private $dbhost = '0.0.0.0';
+	private $dbhost = '127.0.0.1';
 	private $dbuser = 'root';
 	private $dbpass = '123456';
-	private $dbname = 'slimapp';
+	private $dbname = 'rent';
 	private $dbtable = 'customers';
 
 	//Connect

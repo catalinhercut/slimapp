@@ -4,6 +4,10 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app = new \Slim\App;
 
+$app->get('/', function (Request $req,  Response $res, $args = []) {
+    return $res->withStatus(400)->write('Homepage');
+});
+
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
@@ -162,3 +166,8 @@ $app->delete('/api/customer/delete/{id}', function(Request $request, Response $r
 	}
 
 });
+
+
+
+
+
