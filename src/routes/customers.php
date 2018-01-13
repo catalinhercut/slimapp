@@ -4,10 +4,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app = new \Slim\App;
 
-$app->get('/', function (Request $req,  Response $res, $args = []) {
-    return $res->withStatus(400)->write('Homepage');
-});
-
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
@@ -76,6 +72,7 @@ $app->post('/api/customer/add', function(Request $request, Response $response){
 	$address = $request->getParam('address');
 	$city = $request->getParam('city');
 	$state = $request->getParam('state');
+	
 	$sql = "INSERT INTO customers (first_name,last_name,phone,email,address,city,state) VALUES (:first_name,:last_name,:phone,:email,:address,:city,:state)";
 
 	try{

@@ -5,7 +5,7 @@ class db {
 	private $dbuser = 'root';
 	private $dbpass = '123456';
 	private $dbname = 'rent';
-	private $dbtable = 'customers';
+	// private $dbtable = 'customers';
 
 	//Connect
 	public function connect(){
@@ -14,5 +14,17 @@ class db {
 		$dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		return $dbConnection;
+	}
+
+	//Check if table exists
+	public function checkTable($dbTable){
+		if ($result = $mysqli->query("SHOW TABLES LIKE '".$dbTable."'")) {
+		    if($result->num_rows == 1) {
+		        echo "Table exists";
+		    }
+		}
+		else {
+		    echo "Table does not exist";
+		}
 	}
 }
