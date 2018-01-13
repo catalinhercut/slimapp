@@ -72,8 +72,10 @@ $app->post('/api/customer/add', function(Request $request, Response $response){
 	$address = $request->getParam('address');
 	$city = $request->getParam('city');
 	$state = $request->getParam('state');
-	
-	$sql = "INSERT INTO customers (first_name,last_name,phone,email,address,city,state) VALUES (:first_name,:last_name,:phone,:email,:address,:city,:state)";
+	$customer_password = $request->getParam('customer_password');
+
+
+	$sql = "INSERT INTO customers (first_name,last_name,phone,email,address,city,state,customer_password) VALUES (:first_name,:last_name,:phone,:email,:address,:city,:state,:customer_password)";
 
 	try{
 		//Get Db OBject
@@ -88,6 +90,8 @@ $app->post('/api/customer/add', function(Request $request, Response $response){
 		$stmt->bindParam(':address',    $address);
 		$stmt->bindParam(':city',       $city);
 		$stmt->bindParam(':state',      $state);
+		$stmt->bindParam(':customer_password',   $customer_password);
+
 
 		$stmt->execute();
 		echo '{"notice": {"text": "Customer Added"}';
@@ -109,6 +113,8 @@ $app->put('/api/customer/update/{id}', function(Request $request, Response $resp
 	$address = $request->getParam('address');
 	$city = $request->getParam('city');
 	$state = $request->getParam('state');
+	$customer_password = $request->getParam('customer_password');
+
 	$sql = "UPDATE customers  SET 
 				first_name = :first_name,
 				last_name  = :last_name,
@@ -116,7 +122,8 @@ $app->put('/api/customer/update/{id}', function(Request $request, Response $resp
 				email      = :email,
 				address    = :address,
 				city       = :city,
-				state = :state
+				state = :state,
+				customer_password = :customer_password
 			WHERE id = $id";
 
 	try{
@@ -132,6 +139,7 @@ $app->put('/api/customer/update/{id}', function(Request $request, Response $resp
 		$stmt->bindParam(':address',    $address);
 		$stmt->bindParam(':city',       $city);
 		$stmt->bindParam(':state',      $state);
+		$stmt->bindParam(':customer_password',   $customer_password);
 
 		$stmt->execute();
 		echo '{"notice": {"text": "Customer Updated"}';
@@ -164,7 +172,35 @@ $app->delete('/api/customer/delete/{id}', function(Request $request, Response $r
 
 });
 
-
-
+//Login
+// $app->get('/api/customer/login',function() use($app) {
+//     $req = $app->request();
+//     $requiredfields = array(
+//         'email',
+//         'customer_password'
+//     );
+//     // validate required fields
+//     if(!RequiredFields($req->get(), $requiredfields)){
+//         return false;
+//     }
+//     $email = $req->get("email");
+//     $customer_password = $req->get("customer_password");
+//     global $conn;
+//     $sql='SELECT * from users where EmailAddress="'.$email.'" and customer_password="'.$customer_password.'"';
+//     $rs=$conn->query($sql);
+//     $arr = $rs->fetch_array(MYSQLI_ASSOC);
+//     if($arr == null){
+//         echo json_encode(array(
+//             "error" => 1,
+//             "message" => "Email-id or customer_password doesn't exist",
+//         ));
+//         return;
+//     }
+//     echo json_encode(array(
+//         "error" => 0,
+//         "message" => "User logged in successfully",
+//         "users" => $arr
+//     ));
+// });
 
 
