@@ -172,35 +172,23 @@ $app->delete('/api/customer/delete/{id}', function(Request $request, Response $r
 
 });
 
-//Login
-// $app->get('/api/customer/login',function() use($app) {
-//     $req = $app->request();
-//     $requiredfields = array(
-//         'email',
-//         'customer_password'
-//     );
-//     // validate required fields
-//     if(!RequiredFields($req->get(), $requiredfields)){
-//         return false;
-//     }
-//     $email = $req->get("email");
-//     $customer_password = $req->get("customer_password");
-//     global $conn;
-//     $sql='SELECT * from users where EmailAddress="'.$email.'" and customer_password="'.$customer_password.'"';
-//     $rs=$conn->query($sql);
-//     $arr = $rs->fetch_array(MYSQLI_ASSOC);
-//     if($arr == null){
-//         echo json_encode(array(
-//             "error" => 1,
-//             "message" => "Email-id or customer_password doesn't exist",
-//         ));
-//         return;
-//     }
-//     echo json_encode(array(
-//         "error" => 0,
-//         "message" => "User logged in successfully",
-//         "users" => $arr
-//     ));
-// });
 
+//Get all Cars
+$app->get('/api/cars', function(Request $request, Response $response){
+	$sql = "SELECT * from cars";
 
+	try{
+		//Get Db OBject
+		$db = new db();
+		//Connect
+		$db = $db->connect();
+		$stmt = $db->query($sql);
+		$cars = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo json_encode($cars);
+
+	}catch(PDOException $e){
+		echo '{"error": {"text": '.$e->getMessage().'}';
+	}
+
+});
